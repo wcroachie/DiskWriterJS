@@ -43,3 +43,9 @@ Errors can be handled using the optional onerror handler, like so:
   dw.onerror = err => console.error( err );
 
 If it encounters an error in writing to disk, the DiskWriter instance will close immediately and will (attempt to) save however much of the partial file was downloaded to the disk. This is due to the nature of ReadableStreams.
+
+
+* KNOWN ISSUES *
+
+iOS Safari - Download will have ".html" appended to the stream automatically. This can simply be fixed by renaming the file after the stream is done.
+Firefox - If a network interruption occurs, the service worker is interrupted and the stream is ended abruptly instead of waiting for the connection to resume.
