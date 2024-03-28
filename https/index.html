@@ -61,12 +61,13 @@
         }();
       });
       
-      /* use the window.name to get the filename */
-      let lastModified = window.name.split(/;/)[0];
-      let filename = window.name.slice(lastModified.length+1);
+      /* sometimes window.name wont work, so use params to pass info to iframe instead */
+      let params = Object.fromEntries( new URL( location.href ).searchParams );
+      let lastModified = params.lastmodified;
+      let filename = params.filename;
       
-      /* changing the location will trigger the service worker to begin the download */
-      location.search += "&download=true&lastmodified=" + lastModified + "&filename=" + filename;
+      /* the following will trigger the download */
+      location.href = filename + "?download=true&lastmodified=" + lastModified;
       
       onmessage = e => {  
         if( e.source === top ){

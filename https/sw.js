@@ -91,7 +91,7 @@
     
     let params = Object.fromEntries( new URL( e.request.url ).searchParams );
     
-    if( (e.request.destination === "document" || e.request.destination === "iframe") && ("download" in params) ){
+    if( "download" in params ){
       
       let lastModified = new Date(params.lastmodified*1).toUTCString();
       
@@ -100,8 +100,8 @@
         'Last-Modified': lastModified,
       });
       
-      let filename = params.filename;
-      
+      // let filename = params.filename;
+      let filename = e.request.url.split("#")[0].split(/\?/)[0].split("/").pop();
       
       // Make filename RFC5987 compatible
       filename = encodeURIComponent(filename).replace(/['()]/g, escape).replace(/\*/g, '%2A');
