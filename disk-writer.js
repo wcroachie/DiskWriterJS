@@ -40,8 +40,9 @@
     /* httpsIframeURL - required. the url that points to the service worker iframe */
     constructor( httpsIframeURL, filename=Math.random().toString(36).slice(2), lastModified=new Date() ){
 
-      /* strip hash and params in case url has that, and then add a random param to prevent caching */
-      httpsIframeURL = httpsIframeURL.split(/#/)[0].split(/\?/)[0] + "?" + randomParam();
+      /* strip any hash and params in case url has that, and then add a random param to prevent caching */
+      /* sometimes iframe.name wont work, so use params to pass info to iframe instead */
+      httpsIframeURL = httpsIframeURL.split(/#/)[0].split(/\?/)[0] + "?" + randomParam() + "&lastmodified="+(new Date(lastModified)*1)+"&filename="+filename;
       
       let _this = this;
 
@@ -49,8 +50,9 @@
 
       iframe.style.display = "none";
       iframe.hidden = true;
-      iframe.name = (new Date(lastModified)*1) + ";" + filename;
       iframe.src = httpsIframeURL;
+
+      console.log( iframe.name );
 
       function waitForIframeToSay( msgData ){
         return new Promise( res => {
